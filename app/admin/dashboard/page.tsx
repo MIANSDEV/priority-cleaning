@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import AdminLayout from "@/components/admin/AdminLayout";
 import { createAdminClient } from "@/lib/supabase-admin";
 import { CalendarCheck, DollarSign, Clock, CheckCircle } from "lucide-react";

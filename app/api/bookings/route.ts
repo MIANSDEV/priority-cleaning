@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
 
   // Increment promo code usage if applied
   if (promo_code_used) {
-    await supabase.rpc("increment_promo_usage", { code_val: promo_code_used }).catch(() => {});
+    await supabase.rpc("increment_promo_usage", { code_val: promo_code_used });
   }
 
   return NextResponse.json(data, { status: 201 });
