@@ -23,10 +23,18 @@ export default function SpecialsPage() {
 
   const load = async () => {
     setLoading(true);
-    // Get all specials including inactive for admin
-    const res = await fetch("/api/specials");
-    if (res.ok) setSpecials(await res.json());
-    setLoading(false);
+    try {
+      const res = await fetch("/api/specials?all=true");
+      if (res.ok) {
+        setSpecials(await res.json());
+      } else {
+        toast.error("Failed to load specials");
+      }
+    } catch {
+      toast.error("Network error. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -39,44 +47,63 @@ export default function SpecialsPage() {
       return;
     }
     setSaving(true);
-    const res = await fetch("/api/specials", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ...form,
-        promo_code: form.promo_code || null,
-      }),
-    });
-    if (res.ok) {
-      toast.success("Special created!");
-      setShowForm(false);
-      setForm(EMPTY_FORM);
-      await load();
-    } else {
-      toast.error("Failed to create special");
+    try {
+      const res = await fetch("/api/specials", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, promo_code: form.promo_code || null }),
+      });
+      if (res.ok) {
+        toast.success("Special created!");
+        setShowForm(false);
+        setForm(EMPTY_FORM);
+        await load();
+      } else {
+        const d = await res.json().catch(() => ({}));
+        toast.error(d.error || "Failed to create special");
+      }
+    } catch {
+      toast.error("Network error. Please try again.");
+    } finally {
+      setSaving(false);
     }
-    setSaving(false);
   };
 
   const handleToggle = async (special: Special) => {
-    await fetch("/api/specials", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: special.id, is_active: !special.is_active }),
-    });
-    await load();
-    toast.success(`Special ${!special.is_active ? "activated" : "deactivated"}`);
+    try {
+      const res = await fetch("/api/specials", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: special.id, is_active: !special.is_active }),
+      });
+      if (res.ok) {
+        toast.success(`Special ${!special.is_active ? "activated" : "deactivated"}`);
+      } else {
+        toast.error("Failed to update special");
+      }
+      await load();
+    } catch {
+      toast.error("Network error. Please try again.");
+    }
   };
 
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this special?")) return;
-    await fetch("/api/specials", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id }),
-    });
-    await load();
-    toast.success("Deleted");
+    try {
+      const res = await fetch("/api/specials", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+      if (res.ok) {
+        toast.success("Deleted");
+      } else {
+        toast.error("Failed to delete special");
+      }
+      await load();
+    } catch {
+      toast.error("Network error. Please try again.");
+    }
   };
 
   return (

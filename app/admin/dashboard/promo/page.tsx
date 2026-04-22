@@ -24,9 +24,18 @@ export default function PromoPage() {
 
   const load = async () => {
     setLoading(true);
-    const res = await fetch("/api/promo");
-    if (res.ok) setPromos(await res.json());
-    setLoading(false);
+    try {
+      const res = await fetch("/api/promo");
+      if (res.ok) {
+        setPromos(await res.json());
+      } else {
+        toast.error("Failed to load promo codes");
+      }
+    } catch {
+      toast.error("Network error. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -39,45 +48,63 @@ export default function PromoPage() {
       return;
     }
     setSaving(true);
-    const res = await fetch("/api/promo", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ...form,
-        expires_at: form.expires_at || null,
-      }),
-    });
-    if (res.ok) {
-      toast.success("Promo code created!");
-      setShowForm(false);
-      setForm(EMPTY_FORM);
-      await load();
-    } else {
-      const d = await res.json();
-      toast.error(d.error || "Failed to create");
+    try {
+      const res = await fetch("/api/promo", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, expires_at: form.expires_at || null }),
+      });
+      if (res.ok) {
+        toast.success("Promo code created!");
+        setShowForm(false);
+        setForm(EMPTY_FORM);
+        await load();
+      } else {
+        const d = await res.json().catch(() => ({}));
+        toast.error(d.error || "Failed to create promo code");
+      }
+    } catch {
+      toast.error("Network error. Please try again.");
+    } finally {
+      setSaving(false);
     }
-    setSaving(false);
   };
 
   const handleToggle = async (promo: PromoCode) => {
-    await fetch("/api/promo", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: promo.id, is_active: !promo.is_active }),
-    });
-    await load();
-    toast.success(`Promo ${!promo.is_active ? "activated" : "deactivated"}`);
+    try {
+      const res = await fetch("/api/promo", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: promo.id, is_active: !promo.is_active }),
+      });
+      if (res.ok) {
+        toast.success(`Promo ${!promo.is_active ? "activated" : "deactivated"}`);
+      } else {
+        toast.error("Failed to update promo code");
+      }
+      await load();
+    } catch {
+      toast.error("Network error. Please try again.");
+    }
   };
 
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this promo code?")) return;
-    await fetch("/api/promo", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id }),
-    });
-    await load();
-    toast.success("Deleted");
+    try {
+      const res = await fetch("/api/promo", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+      if (res.ok) {
+        toast.success("Deleted");
+      } else {
+        toast.error("Failed to delete promo code");
+      }
+      await load();
+    } catch {
+      toast.error("Network error. Please try again.");
+    }
   };
 
   return (

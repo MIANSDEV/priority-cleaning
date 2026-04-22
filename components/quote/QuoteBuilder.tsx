@@ -9,7 +9,7 @@ import SelectServices from "@/components/quote/steps/SelectServices";
 import Scheduling from "@/components/quote/steps/Scheduling";
 import ContactInfo from "@/components/quote/steps/ContactInfo";
 import ReviewBook from "@/components/quote/steps/ReviewBook";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const STEPS: QuoteStep[] = ["services", "scheduling", "contact", "review"];
 
@@ -19,14 +19,12 @@ export default function QuoteBuilder() {
   const [specials, setSpecials] = useState<Special[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Quote state
   const [selected, setSelected] = useState<SelectedService[]>([]);
   const [promoInput, setPromoInput] = useState("");
   const [appliedPromo, setAppliedPromo] = useState<PromoCode | null>(null);
   const [promoError, setPromoError] = useState("");
   const [promoLoading, setPromoLoading] = useState(false);
 
-  // Scheduling
   const [scheduling, setScheduling] = useState({
     preferred_date: "",
     preferred_time: "",
@@ -34,7 +32,6 @@ export default function QuoteBuilder() {
     service_address: "",
   });
 
-  // Contact
   const [contact, setContact] = useState({
     customer_name: "",
     customer_email: "",
@@ -42,12 +39,10 @@ export default function QuoteBuilder() {
     notes: "",
   });
 
-  // Booking submission
   const [submitting, setSubmitting] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
   const [bookingNumber, setBookingNumber] = useState("");
 
-  // ---- Fetch data ----
   useEffect(() => {
     const load = async () => {
       try {
@@ -66,7 +61,11 @@ export default function QuoteBuilder() {
     load();
   }, []);
 
-  // ---- Quote calculations ----
+  // Scroll to top on step change
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [step]);
+
   const subtotal = selected.reduce((sum, s) => sum + s.subtotal, 0);
   const discountAmount = appliedPromo
     ? appliedPromo.discount_type === "percentage"
@@ -84,7 +83,6 @@ export default function QuoteBuilder() {
     total,
   };
 
-  // ---- Promo code ----
   const handleApplyPromo = useCallback(async (code: string) => {
     if (!code) return;
     setPromoLoading(true);
@@ -115,7 +113,6 @@ export default function QuoteBuilder() {
     setPromoError("");
   };
 
-  // ---- Navigation ----
   const handleNext = () => {
     const idx = STEPS.indexOf(step);
     if (idx < STEPS.length - 1) setStep(STEPS[idx + 1]);
@@ -126,7 +123,6 @@ export default function QuoteBuilder() {
     if (idx > 0) setStep(STEPS[idx - 1]);
   };
 
-  // ---- Validation ----
   const canProceed = () => {
     if (step === "services") return selected.length > 0;
     if (step === "scheduling") return !!scheduling.preferred_date && !!scheduling.preferred_time && !!scheduling.zip_code;
@@ -134,7 +130,6 @@ export default function QuoteBuilder() {
     return true;
   };
 
-  // ---- Submit booking ----
   const handleConfirm = async () => {
     setSubmitting(true);
     try {
@@ -167,7 +162,7 @@ export default function QuoteBuilder() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <div className="text-center">
           <div className="w-10 h-10 border-4 border-[#F5A000] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
           <p className="text-gray-500 text-sm">Loading services...</p>
@@ -183,38 +178,35 @@ export default function QuoteBuilder() {
     review: "Confirm Booking",
   };
 
+  const showMobileBar = !confirmed && step !== "review";
+
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Step indicator */}
       <StepIndicator currentStep={step} />
 
-      <div className="max-w-6xl mx-auto px-4 py-6">
-        <div className="flex gap-5">
-          {/* Left: Online Specials (hidden on mobile) */}
-          <div className="hidden lg:block w-48 flex-shrink-0">
+      <div className={`max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-6 ${showMobileBar ? "pb-24 md:pb-6" : ""}`}>
+        <div className="flex gap-4 lg:gap-5">
+          {/* Left: Online Specials — desktop only */}
+          <div className="hidden lg:block w-44 xl:w-48 flex-shrink-0">
             <OnlineSpecials
               specials={specials}
-              onApply={(code) => {
-                setPromoInput(code);
-                handleApplyPromo(code);
-              }}
+              onApply={(code) => { setPromoInput(code); handleApplyPromo(code); }}
             />
           </div>
 
           {/* Center: Main content */}
           <div className="flex-1 min-w-0">
-            {/* Back button */}
             {step !== "services" && !confirmed && (
               <button
                 onClick={handleBack}
-                className="flex items-center gap-1 text-sm text-gray-500 hover:text-[#F5A000] mb-4 transition-colors"
+                className="flex items-center gap-1 text-sm text-gray-500 hover:text-[#F5A000] mb-3 transition-colors"
               >
                 <ChevronLeft size={16} />
                 Back
               </button>
             )}
 
-            <div className="bg-white rounded shadow-sm p-5">
+            <div className="bg-white rounded shadow-sm p-4 sm:p-5">
               {step === "services" && (
                 <SelectServices
                   categories={categories}
@@ -239,9 +231,9 @@ export default function QuoteBuilder() {
                 />
               )}
 
-              {/* Next button (inside card, below content) - not shown on review step */}
+              {/* Desktop next button (inside card) — hidden on mobile since sticky bar handles it */}
               {step !== "review" && !confirmed && (
-                <div className="mt-6 pt-4 border-t border-gray-100 flex justify-end">
+                <div className="hidden md:flex mt-6 pt-4 border-t border-gray-100 justify-end">
                   <button
                     onClick={handleNext}
                     disabled={!canProceed()}
@@ -252,10 +244,20 @@ export default function QuoteBuilder() {
                 </div>
               )}
             </div>
+
+            {/* Mobile: specials shown below main card */}
+            {specials.length > 0 && (
+              <div className="lg:hidden mt-4">
+                <OnlineSpecials
+                  specials={specials}
+                  onApply={(code) => { setPromoInput(code); handleApplyPromo(code); }}
+                />
+              </div>
+            )}
           </div>
 
-          {/* Right: Quote Summary */}
-          <div className="w-64 flex-shrink-0 hidden md:block">
+          {/* Right: Quote Summary — md+ */}
+          <div className="w-56 xl:w-64 flex-shrink-0 hidden md:block">
             <QuoteSummary
               quote={quote}
               promoInput={promoInput}
@@ -266,34 +268,36 @@ export default function QuoteBuilder() {
               promoLoading={promoLoading}
               onNext={handleNext}
               nextLabel={stepLabels[step]}
-              showNext={step === "services"}
+              showNext={false}
             />
           </div>
         </div>
-
-        {/* Mobile: specials and quote */}
-        <div className="md:hidden mt-4 space-y-4">
-          <QuoteSummary
-            quote={quote}
-            promoInput={promoInput}
-            setPromoInput={setPromoInput}
-            onApplyPromo={handleApplyPromo}
-            onRemovePromo={handleRemovePromo}
-            promoError={promoError}
-            promoLoading={promoLoading}
-            onNext={handleNext}
-            nextLabel={stepLabels[step]}
-            showNext={step === "services"}
-          />
-          <OnlineSpecials
-            specials={specials}
-            onApply={(code) => {
-              setPromoInput(code);
-              handleApplyPromo(code);
-            }}
-          />
-        </div>
       </div>
+
+      {/* Mobile sticky bottom bar */}
+      {showMobileBar && (
+        <div className="md:hidden fixed bottom-0 left-0 right-0 z-20 bg-white border-t border-gray-200 shadow-lg">
+          <div className="flex items-center justify-between px-4 py-3">
+            <div>
+              <div className="text-[10px] text-gray-400 uppercase tracking-wide">Estimated Total</div>
+              <div className="text-xl font-bold text-gray-800">${total.toFixed(2)}</div>
+              {discountAmount > 0 && (
+                <div className="text-[10px] text-green-600 font-bold">
+                  Saving ${discountAmount.toFixed(2)}
+                </div>
+              )}
+            </div>
+            <button
+              onClick={handleNext}
+              disabled={!canProceed()}
+              className="bg-brand disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3 px-5 rounded text-sm flex items-center gap-2 transition-colors"
+            >
+              {stepLabels[step]}
+              <ChevronRight size={15} />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

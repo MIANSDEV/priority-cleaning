@@ -4,6 +4,7 @@ import AdminLayout from "@/components/admin/AdminLayout";
 import { useEffect, useState } from "react";
 import { Booking } from "@/lib/types";
 import { RefreshCw, ChevronDown, ChevronUp } from "lucide-react";
+import toast, { Toaster } from "react-hot-toast";
 
 const STATUS_COLORS: Record<string, string> = {
   pending: "bg-yellow-100 text-yellow-800",
@@ -23,34 +24,52 @@ export default function BookingsPage() {
 
   const loadBookings = async () => {
     setLoading(true);
-    const url = filter ? `/api/bookings?status=${filter}` : "/api/bookings";
-    const res = await fetch(url);
-    if (res.ok) {
-      const data = await res.json();
-      setBookings(data.bookings || []);
+    try {
+      const url = filter ? `/api/bookings?status=${filter}` : "/api/bookings";
+      const res = await fetch(url);
+      if (res.ok) {
+        const data = await res.json();
+        setBookings(data.bookings || []);
+      } else {
+        toast.error("Failed to load bookings");
+      }
+    } catch {
+      toast.error("Network error. Please try again.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
     loadBookings();
-  }, [filter]);
+  }, [filter]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleStatusChange = async (id: string, status: string) => {
     setUpdatingId(id);
-    await fetch(`/api/bookings/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status }),
-    });
-    await loadBookings();
-    setUpdatingId(null);
+    try {
+      const res = await fetch(`/api/bookings/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status }),
+      });
+      if (res.ok) {
+        toast.success("Status updated");
+        await loadBookings();
+      } else {
+        toast.error("Failed to update status");
+      }
+    } catch {
+      toast.error("Network error. Please try again.");
+    } finally {
+      setUpdatingId(null);
+    }
   };
 
   return (
     <AdminLayout>
+      <Toaster position="top-right" />
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Bookings</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Bookings</h1>
         <button
           onClick={loadBookings}
           className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-800 bg-white border border-gray-200 rounded px-3 py-1.5 shadow-sm"
@@ -94,10 +113,10 @@ export default function BookingsPage() {
                   onClick={() => setExpandedId(expandedId === b.id ? null : b.id)}
                 >
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-3 flex-wrap">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <span className="font-mono text-xs text-gray-500">{b.booking_number}</span>
                       <span className="font-bold text-sm text-gray-800">{b.customer_name}</span>
-                      <span className="text-xs text-gray-400">{b.customer_email}</span>
+                      <span className="text-xs text-gray-400 hidden sm:inline">{b.customer_email}</span>
                     </div>
                     <div className="text-xs text-gray-400 mt-0.5">
                       {new Date(b.created_at).toLocaleString()} •{" "}
@@ -149,7 +168,7 @@ export default function BookingsPage() {
                       </div>
                     </div>
                     {/* Status change */}
-                    <div className="flex items-center gap-2 pt-2 border-t border-gray-200">
+                    <div className="flex items-center gap-2 pt-2 border-t border-gray-200 flex-wrap">
                       <span className="text-xs font-bold text-gray-500">Update Status:</span>
                       {STATUSES.map((s) => (
                         <button

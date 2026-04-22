@@ -9,17 +9,17 @@ function getClient(useAdmin = false) {
   return createClient(url, key, { auth: { persistSession: false } });
 }
 
-// GET - all active specials
-export async function GET() {
-  const supabase = getClient();
-  const { data, error } = await supabase
-    .from("specials")
-    .select("*")
-    .eq("is_active", true)
-    .order("display_order");
+// GET - active specials for public; all specials when ?all=true (admin)
+export async function GET(request: NextRequest) {
+  const supabase = getClient(true);
+  const all = new URL(request.url).searchParams.get("all") === "true";
 
+  let query = supabase.from("specials").select("*").order("display_order");
+  if (!all) query = query.eq("is_active", true);
+
+  const { data, error } = await query;
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json(data);
+  return NextResponse.json(data || []);
 }
 
 // PUT - create special (admin)

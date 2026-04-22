@@ -43,22 +43,22 @@ function groupByCategory(services: SelectedService[]) {
 export default function ReviewBook({ quote, reviewData, onConfirm, loading, confirmed, bookingNumber }: Props) {
   if (confirmed) {
     return (
-      <div className="text-center py-12">
-        <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <CheckCircle size={40} className="text-green-500" />
+      <div className="text-center py-8 sm:py-12 px-2">
+        <div className="w-16 h-16 sm:w-20 sm:h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <CheckCircle size={32} className="text-green-500 sm:w-10 sm:h-10" />
         </div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">Booking Confirmed!</h2>
-        <p className="text-gray-500 mb-4">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">Booking Confirmed!</h2>
+        <p className="text-gray-500 text-sm mb-4">
           Your booking request has been submitted successfully.
         </p>
-        <div className="inline-block bg-brand text-white font-bold text-lg px-6 py-3 rounded mb-6">
+        <div className="inline-block bg-brand text-white font-bold text-base sm:text-lg px-5 py-3 rounded mb-5 break-all">
           Booking #{bookingNumber}
         </div>
-        <p className="text-sm text-gray-600 max-w-md mx-auto">
+        <p className="text-sm text-gray-600 max-w-sm mx-auto">
           A confirmation has been sent to <strong>{reviewData.customer_email}</strong>. Our team
           will contact you at <strong>{reviewData.customer_phone}</strong> to confirm your appointment.
         </p>
-        <div className="mt-8 p-4 bg-amber-50 border border-amber-200 rounded text-sm text-amber-800 max-w-md mx-auto">
+        <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded text-sm text-amber-800 max-w-sm mx-auto">
           <strong>Estimated Total: ${quote.total.toFixed(2)}</strong>
           <br />
           Final pricing will be confirmed at the time of service.
@@ -78,7 +78,7 @@ export default function ReviewBook({ quote, reviewData, onConfirm, loading, conf
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         {/* Services Summary */}
         <div>
           <h3 className="font-bold text-gray-700 mb-3 text-sm uppercase tracking-wide">
@@ -193,11 +193,11 @@ export default function ReviewBook({ quote, reviewData, onConfirm, loading, conf
       </div>
 
       {/* Confirm Button */}
-      <div className="mt-8 flex flex-col items-center gap-3">
+      <div className="mt-6 sm:mt-8 flex flex-col items-center gap-3">
         <button
           onClick={onConfirm}
           disabled={loading}
-          className="w-full max-w-md bg-brand disabled:opacity-50 text-white font-bold py-4 rounded text-base flex items-center justify-center gap-2 transition-colors shadow-lg"
+          className="w-full max-w-md bg-brand disabled:opacity-50 text-white font-bold py-3.5 sm:py-4 rounded text-sm sm:text-base flex items-center justify-center gap-2 transition-colors shadow-lg"
         >
           {loading ? (
             <>

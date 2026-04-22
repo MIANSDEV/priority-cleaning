@@ -15,19 +15,22 @@ export default function AdminLogin() {
     e.preventDefault();
     setLoading(true);
     setError("");
-
-    const res = await fetch("/api/admin/auth", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password }),
-    });
-
-    if (res.ok) {
-      router.push("/admin/dashboard");
-    } else {
-      setError("Incorrect password. Please try again.");
+    try {
+      const res = await fetch("/api/admin/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+      if (res.ok) {
+        router.push("/admin/dashboard");
+      } else {
+        setError("Incorrect password. Please try again.");
+      }
+    } catch {
+      setError("Network error. Please check your connection and try again.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (

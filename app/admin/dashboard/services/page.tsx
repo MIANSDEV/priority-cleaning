@@ -14,23 +14,28 @@ export default function ServicesPage() {
 
   const load = async () => {
     setLoading(true);
-    // Fetch ALL categories (including inactive) for admin
-    const res = await fetch("/api/services");
-    if (res.ok) {
-      const data: ServiceCategory[] = await res.json();
-      setCategories(data);
-      // Initialize prices map
-      const p: Record<string, number> = {};
-      data.forEach((cat) =>
-        cat.items.forEach((item) =>
-          item.levels.forEach((lvl) => {
-            p[lvl.id] = lvl.price_per_unit;
-          })
-        )
-      );
-      setPrices(p);
+    try {
+      const res = await fetch("/api/services");
+      if (res.ok) {
+        const data: ServiceCategory[] = await res.json();
+        setCategories(data);
+        const p: Record<string, number> = {};
+        data.forEach((cat) =>
+          cat.items.forEach((item) =>
+            item.levels.forEach((lvl) => {
+              p[lvl.id] = lvl.price_per_unit;
+            })
+          )
+        );
+        setPrices(p);
+      } else {
+        toast.error("Failed to load services");
+      }
+    } catch {
+      toast.error("Network error. Please try again.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -44,30 +49,41 @@ export default function ServicesPage() {
 
   const handleSavePrice = async (levelId: string) => {
     setSaving(levelId);
-    const res = await fetch("/api/services", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: levelId, price_per_unit: prices[levelId] }),
-    });
-    if (res.ok) {
-      toast.success("Price updated!");
-    } else {
-      toast.error("Failed to update price");
+    try {
+      const res = await fetch("/api/services", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: levelId, price_per_unit: prices[levelId] }),
+      });
+      if (res.ok) {
+        toast.success("Price updated!");
+      } else {
+        toast.error("Failed to update price");
+      }
+    } catch {
+      toast.error("Network error. Please try again.");
+    } finally {
+      setSaving(null);
     }
-    setSaving(null);
   };
 
   const handleToggleCategory = async (categoryId: string, current: boolean) => {
-    const res = await fetch("/api/services/category", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: categoryId, is_active: !current }),
-    });
-    if (res.ok) {
-      setCategories((prev) =>
-        prev.map((c) => (c.id === categoryId ? { ...c, is_active: !current } : c))
-      );
-      toast.success(`Category ${!current ? "enabled" : "disabled"}`);
+    try {
+      const res = await fetch("/api/services/category", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: categoryId, is_active: !current }),
+      });
+      if (res.ok) {
+        setCategories((prev) =>
+          prev.map((c) => (c.id === categoryId ? { ...c, is_active: !current } : c))
+        );
+        toast.success(`Category ${!current ? "enabled" : "disabled"}`);
+      } else {
+        toast.error("Failed to update category");
+      }
+    } catch {
+      toast.error("Network error. Please try again.");
     }
   };
 
