@@ -90,7 +90,7 @@ export default function PromoPage() {
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="flex items-center gap-2 bg-[#F5A000] hover:bg-[#D48A00] text-white font-bold px-4 py-2 rounded text-sm transition-colors"
+          className="flex items-center gap-2 bg-brand text-white font-bold px-4 py-2 rounded text-sm transition-colors"
         >
           <Plus size={15} /> New Code
         </button>
@@ -166,7 +166,7 @@ export default function PromoPage() {
             <button
               onClick={handleCreate}
               disabled={saving}
-              className="bg-[#F5A000] hover:bg-[#D48A00] text-white font-bold px-5 py-2 rounded text-sm disabled:opacity-50"
+              className="bg-brand text-white font-bold px-5 py-2 rounded text-sm disabled:opacity-50"
             >
               {saving ? "Creating..." : "Create Code"}
             </button>

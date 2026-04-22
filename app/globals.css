@@ -10,10 +10,19 @@
 
 html,
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
-    sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Brand gradient used on all yellow/gold elements */
+.bg-brand {
+  background: #f0b030 !important;
+}
+.bg-brand:hover:not(:disabled) {
+  background: #fcb116 !important;
 }
 
 /* Ensure smooth scrolling */

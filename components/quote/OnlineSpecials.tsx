@@ -20,7 +20,7 @@ export default function OnlineSpecials({ specials, onApply }: Props) {
             key={special.id}
             className="border border-gray-200 rounded overflow-hidden bg-white shadow-sm"
           >
-            <div className="bg-[#F5A000] text-white text-[10px] font-bold px-2 py-1 flex items-center gap-1">
+            <div className="bg-brand text-white text-[10px] font-bold px-2 py-1 flex items-center gap-1">
               <Tag size={10} />
               {special.badge_text || "SPECIAL"}
             </div>
@@ -32,7 +32,7 @@ export default function OnlineSpecials({ specials, onApply }: Props) {
               {special.promo_code && (
                 <button
                   onClick={() => onApply(special.promo_code!)}
-                  className="mt-1.5 w-full text-[11px] font-bold bg-[#F5A000] hover:bg-[#D48A00] text-white py-1 px-2 rounded transition-colors"
+                  className="mt-1.5 w-full text-[11px] font-bold bg-brand text-white py-1 px-2 rounded transition-colors"
                 >
                   ADD
                 </button>

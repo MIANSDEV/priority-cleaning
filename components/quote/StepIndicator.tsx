@@ -30,7 +30,7 @@ export default function StepIndicator({ currentStep }: Props) {
               <div
                 key={step.key}
                 className={`flex items-center flex-1 py-3 px-4 text-sm font-medium relative
-                  ${isActive ? "bg-[#F5A000] text-white" : ""}
+                  ${isActive ? "bg-brand text-white" : ""}
                   ${isCompleted ? "bg-gray-100 text-gray-600" : ""}
                   ${!isActive && !isCompleted ? "text-gray-400 bg-white" : ""}
                   ${!isLast ? "border-r border-gray-200" : ""}
@@ -39,7 +39,7 @@ export default function StepIndicator({ currentStep }: Props) {
                 <span
                   className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mr-2 flex-shrink-0
                     ${isActive ? "bg-white text-[#F5A000]" : ""}
-                    ${isCompleted ? "bg-[#F5A000] text-white" : ""}
+                    ${isCompleted ? "bg-brand text-white" : ""}
                     ${!isActive && !isCompleted ? "bg-gray-200 text-gray-500" : ""}
                   `}
                 >

@@ -51,7 +51,7 @@ export default function ReviewBook({ quote, reviewData, onConfirm, loading, conf
         <p className="text-gray-500 mb-4">
           Your booking request has been submitted successfully.
         </p>
-        <div className="inline-block bg-[#F5A000] text-white font-bold text-lg px-6 py-3 rounded mb-6">
+        <div className="inline-block bg-brand text-white font-bold text-lg px-6 py-3 rounded mb-6">
           Booking #{bookingNumber}
         </div>
         <p className="text-sm text-gray-600 max-w-md mx-auto">
@@ -197,7 +197,7 @@ export default function ReviewBook({ quote, reviewData, onConfirm, loading, conf
         <button
           onClick={onConfirm}
           disabled={loading}
-          className="w-full max-w-md bg-[#F5A000] hover:bg-[#D48A00] disabled:opacity-50 text-white font-bold py-4 rounded text-base flex items-center justify-center gap-2 transition-colors shadow-lg"
+          className="w-full max-w-md bg-brand disabled:opacity-50 text-white font-bold py-4 rounded text-base flex items-center justify-center gap-2 transition-colors shadow-lg"
         >
           {loading ? (
             <>

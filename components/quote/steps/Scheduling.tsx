@@ -69,7 +69,7 @@ export default function Scheduling({ data, onChange }: Props) {
                 className={`py-2.5 px-3 rounded border text-sm font-medium text-left transition-all
                   ${
                     data.preferred_time === slot.value
-                      ? "bg-[#F5A000] text-white border-[#F5A000]"
+                      ? "bg-brand text-white border-[#F5A000]"
                       : "bg-white text-gray-700 border-gray-300 hover:border-[#F5A000]"
                   }
                 `}

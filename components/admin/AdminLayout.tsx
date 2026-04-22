@@ -43,7 +43,7 @@ export default function AdminLayout({ children }: Props) {
                 href={href}
                 className={`flex items-center gap-3 px-4 py-2.5 text-sm transition-colors
                   ${isActive
-                    ? "bg-[#F5A000] text-white"
+                    ? "bg-brand text-white"
                     : "text-gray-300 hover:bg-gray-700 hover:text-white"
                   }
                 `}

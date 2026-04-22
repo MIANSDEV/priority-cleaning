@@ -35,7 +35,7 @@ export default function AdminLogin() {
       <div className="w-full max-w-sm">
         {/* Logo area */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-[#F5A000] rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-brand rounded-full flex items-center justify-center mx-auto mb-4">
             <Lock size={28} className="text-white" />
           </div>
           <h1 className="text-2xl font-bold text-white">Admin Login</h1>
@@ -76,7 +76,7 @@ export default function AdminLogin() {
           <button
             type="submit"
             disabled={loading || !password}
-            className="w-full bg-[#F5A000] hover:bg-[#D48A00] disabled:opacity-50 text-white font-bold py-2.5 rounded transition-colors"
+            className="w-full bg-brand disabled:opacity-50 text-white font-bold py-2.5 rounded transition-colors"
           >
             {loading ? "Signing in..." : "Sign In"}
           </button>

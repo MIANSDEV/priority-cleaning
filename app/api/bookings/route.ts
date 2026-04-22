@@ -17,7 +17,7 @@ function generateBookingNumber(): string {
 
 // POST - create a new booking
 export async function POST(request: NextRequest) {
-  const supabase = getClient();
+  const supabase = getClient(true);
   const body = await request.json();
 
   const {

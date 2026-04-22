@@ -68,7 +68,7 @@ export default function BookingsPage() {
             onClick={() => setFilter(s)}
             className={`text-xs font-bold px-3 py-1.5 rounded-full border transition-all
               ${filter === s
-                ? "bg-[#F5A000] text-white border-[#F5A000]"
+                ? "bg-brand text-white border-[#F5A000]"
                 : "bg-white text-gray-600 border-gray-200 hover:border-[#F5A000]"
               }
             `}

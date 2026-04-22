@@ -47,21 +47,37 @@ export default function QuoteSummary({
         </div>
       </div>
 
-      {/* Line items */}
+      {/* Line items — grouped by category then level */}
       {quote.selected.length > 0 && (
-        <div className="px-4 py-2 border-b border-gray-100 max-h-52 overflow-y-auto">
-          {quote.selected.map((item, i) => (
-            <div key={i} className="flex justify-between text-xs py-1 border-b border-gray-50 last:border-0">
-              <div className="pr-2 flex-1">
-                <span className="text-gray-700 font-medium">{item.item_name}</span>
-                <span className="text-gray-400 ml-1">× {item.quantity}</span>
-                <div className="text-gray-400 text-[10px]">{item.level_name}</div>
+        <div className="border-b border-gray-100 max-h-64 overflow-y-auto">
+          {(() => {
+            // Group by category, then by level, summing qty and subtotal
+            const grouped: Record<string, Record<string, { quantity: number; subtotal: number }>> = {};
+            for (const s of quote.selected) {
+              if (!grouped[s.category_name]) grouped[s.category_name] = {};
+              if (!grouped[s.category_name][s.level_name]) {
+                grouped[s.category_name][s.level_name] = { quantity: 0, subtotal: 0 };
+              }
+              grouped[s.category_name][s.level_name].quantity += s.quantity;
+              grouped[s.category_name][s.level_name].subtotal += s.subtotal;
+            }
+            return Object.entries(grouped).map(([catName, levels]) => (
+              <div key={catName}>
+                <div className="bg-[#1A1A1A] text-white px-4 py-1.5 text-[10px] font-bold uppercase tracking-wide">
+                  {catName}
+                </div>
+                {Object.entries(levels).map(([levelName, data]) => (
+                  <div key={levelName} className="flex justify-between text-xs px-4 py-1.5 border-b border-gray-50 last:border-0">
+                    <div>
+                      <span className="text-gray-700 font-medium">{levelName}</span>
+                      <span className="text-gray-400 ml-2">{data.quantity}</span>
+                    </div>
+                    <span className="text-gray-700 font-medium">${data.subtotal.toFixed(2)}</span>
+                  </div>
+                ))}
               </div>
-              <span className="text-gray-700 font-medium whitespace-nowrap">
-                ${item.subtotal.toFixed(2)}
-              </span>
-            </div>
-          ))}
+            ));
+          })()}
         </div>
       )}
 
@@ -120,7 +136,7 @@ export default function QuoteSummary({
             <button
               onClick={() => onApplyPromo(promoInput)}
               disabled={promoLoading || !promoInput}
-              className="bg-[#F5A000] hover:bg-[#D48A00] disabled:opacity-50 text-white text-xs font-bold px-3 py-1.5 rounded transition-colors"
+              className="bg-brand disabled:opacity-50 text-white text-xs font-bold px-3 py-1.5 rounded transition-colors"
             >
               {promoLoading ? "..." : "Apply"}
             </button>
@@ -132,11 +148,11 @@ export default function QuoteSummary({
       {/* Trust badges */}
       <div className="px-4 py-3 text-[10px] text-gray-500 space-y-1">
         <div className="flex items-center gap-1.5">
-          <span className="w-2 h-2 bg-[#F5A000] rounded-full flex-shrink-0" />
+          <span className="w-2 h-2 bg-brand rounded-full flex-shrink-0" />
           100% satisfaction guarantee
         </div>
         <div className="flex items-center gap-1.5">
-          <span className="w-2 h-2 bg-[#F5A000] rounded-full flex-shrink-0" />
+          <span className="w-2 h-2 bg-brand rounded-full flex-shrink-0" />
           Prices shown are starting rates, final pricing at time of service
         </div>
       </div>
@@ -147,7 +163,7 @@ export default function QuoteSummary({
           <button
             onClick={onNext}
             disabled={quote.selected.length === 0}
-            className="w-full bg-[#F5A000] hover:bg-[#D48A00] disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3 rounded text-sm flex items-center justify-center gap-2 transition-colors"
+            className="w-full bg-brand disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3 rounded text-sm flex items-center justify-center gap-2 transition-colors"
           >
             {nextLabel}
             <ChevronRight size={16} />

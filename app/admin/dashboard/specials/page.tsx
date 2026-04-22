@@ -91,7 +91,7 @@ export default function SpecialsPage() {
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="flex items-center gap-2 bg-[#F5A000] hover:bg-[#D48A00] text-white font-bold px-4 py-2 rounded text-sm transition-colors"
+          className="flex items-center gap-2 bg-brand text-white font-bold px-4 py-2 rounded text-sm transition-colors"
         >
           <Plus size={15} /> Add Special
         </button>
@@ -155,7 +155,7 @@ export default function SpecialsPage() {
             <button
               onClick={handleCreate}
               disabled={saving}
-              className="bg-[#F5A000] hover:bg-[#D48A00] text-white font-bold px-5 py-2 rounded text-sm disabled:opacity-50"
+              className="bg-brand text-white font-bold px-5 py-2 rounded text-sm disabled:opacity-50"
             >
               {saving ? "Creating..." : "Create Special"}
             </button>
@@ -181,7 +181,7 @@ export default function SpecialsPage() {
                 !s.is_active ? "opacity-60" : ""
               }`}
             >
-              <div className="bg-[#F5A000] text-white text-[10px] font-bold px-3 py-1 flex items-center gap-1">
+              <div className="bg-brand text-white text-[10px] font-bold px-3 py-1 flex items-center gap-1">
                 <GripVertical size={10} />
                 {s.badge_text}
               </div>

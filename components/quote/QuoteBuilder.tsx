@@ -245,7 +245,7 @@ export default function QuoteBuilder() {
                   <button
                     onClick={handleNext}
                     disabled={!canProceed()}
-                    className="bg-[#F5A000] hover:bg-[#D48A00] disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3 px-8 rounded text-sm transition-colors"
+                    className="bg-brand disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3 px-8 rounded text-sm transition-colors"
                   >
                     {stepLabels[step]}
                   </button>

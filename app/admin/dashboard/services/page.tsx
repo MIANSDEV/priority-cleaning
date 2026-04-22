@@ -129,7 +129,7 @@ export default function ServicesPage() {
                           <button
                             onClick={() => handleSavePrice(level.id)}
                             disabled={saving === level.id}
-                            className="p-1 bg-[#F5A000] hover:bg-[#D48A00] rounded text-white disabled:opacity-50 transition-colors"
+                            className="p-1 bg-brand rounded text-white disabled:opacity-50 transition-colors"
                             title="Save price"
                           >
                             <Save size={12} />
