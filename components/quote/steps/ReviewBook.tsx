@@ -207,7 +207,7 @@ export default function ReviewBook({ quote, reviewData, onConfirm, loading, conf
           ) : (
             <>
               <CheckCircle size={18} />
-              Confirm Booking Request
+              Choose Payment Method
             </>
           )}
         </button>

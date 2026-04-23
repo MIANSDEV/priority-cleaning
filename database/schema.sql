@@ -93,6 +93,9 @@ CREATE TABLE IF NOT EXISTS bookings (
   promo_code_used TEXT,
   total NUMERIC(10,2) NOT NULL DEFAULT 0,
   status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'confirmed', 'completed', 'cancelled')),
+  payment_method TEXT DEFAULT 'cash' CHECK (payment_method IN ('stripe', 'cash', 'card')),
+  payment_status TEXT DEFAULT 'unpaid' CHECK (payment_status IN ('paid', 'unpaid', 'pending')),
+  stripe_payment_intent_id TEXT,
   notes TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()

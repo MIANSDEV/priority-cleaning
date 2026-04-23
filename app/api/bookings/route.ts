@@ -25,6 +25,7 @@ export async function POST(request: NextRequest) {
     zip_code, service_address, preferred_date, preferred_time,
     selected_services, subtotal, discount_amount,
     promo_code_used, total, notes,
+    payment_method, payment_status, stripe_payment_intent_id,
   } = body;
 
   // Validate required fields
@@ -50,6 +51,9 @@ export async function POST(request: NextRequest) {
       total,
       notes: notes || null,
       status: "pending",
+      payment_method: payment_method || "cash",
+      payment_status: payment_status || "unpaid",
+      stripe_payment_intent_id: stripe_payment_intent_id || null,
     })
     .select()
     .single();
@@ -69,8 +73,9 @@ export async function GET(request: NextRequest) {
   const supabase = getClient(true);
   const { searchParams } = new URL(request.url);
   const status = searchParams.get("status");
+  const payment_status = searchParams.get("payment_status");
   const page = parseInt(searchParams.get("page") || "1");
-  const limit = 20;
+  const limit = Math.min(parseInt(searchParams.get("limit") || "20"), 1000);
   const offset = (page - 1) * limit;
 
   let query = supabase
@@ -80,6 +85,7 @@ export async function GET(request: NextRequest) {
     .range(offset, offset + limit - 1);
 
   if (status) query = query.eq("status", status);
+  if (payment_status) query = query.eq("payment_status", payment_status);
 
   const { data, error, count } = await query;
 

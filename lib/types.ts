@@ -106,6 +106,9 @@ export interface Booking {
   promo_code_used: string | null;
   total: number;
   status: "pending" | "confirmed" | "completed" | "cancelled";
+  payment_method: "stripe" | "cash" | "card";
+  payment_status: "paid" | "unpaid" | "pending";
+  stripe_payment_intent_id: string | null;
   notes: string | null;
   created_at: string;
   updated_at: string;

@@ -9,6 +9,7 @@ import SelectServices from "@/components/quote/steps/SelectServices";
 import Scheduling from "@/components/quote/steps/Scheduling";
 import ContactInfo from "@/components/quote/steps/ContactInfo";
 import ReviewBook from "@/components/quote/steps/ReviewBook";
+import PaymentModal, { PaymentMethod } from "@/components/quote/PaymentModal";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const STEPS: QuoteStep[] = ["services", "scheduling", "contact", "review"];
@@ -42,6 +43,7 @@ export default function QuoteBuilder() {
   const [submitting, setSubmitting] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
   const [bookingNumber, setBookingNumber] = useState("");
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -130,7 +132,15 @@ export default function QuoteBuilder() {
     return true;
   };
 
-  const handleConfirm = async () => {
+  const handleConfirm = () => {
+    setShowPaymentModal(true);
+  };
+
+  const handlePaymentComplete = async (
+    paymentMethod: PaymentMethod,
+    paymentStatus: "paid" | "unpaid",
+    stripePaymentIntentId?: string
+  ) => {
     setSubmitting(true);
     try {
       const res = await fetch("/api/bookings", {
@@ -144,6 +154,9 @@ export default function QuoteBuilder() {
           discount_amount: discountAmount,
           promo_code_used: appliedPromo?.code || null,
           total,
+          payment_method: paymentMethod,
+          payment_status: paymentStatus,
+          stripe_payment_intent_id: stripePaymentIntentId || null,
         }),
       });
       const data = await res.json();
@@ -152,6 +165,7 @@ export default function QuoteBuilder() {
       } else {
         setBookingNumber(data.booking_number);
         setConfirmed(true);
+        setShowPaymentModal(false);
       }
     } catch {
       alert("Network error. Please try again.");
@@ -273,6 +287,16 @@ export default function QuoteBuilder() {
           </div>
         </div>
       </div>
+
+      {/* Payment modal */}
+      {showPaymentModal && (
+        <PaymentModal
+          amount={total}
+          onComplete={handlePaymentComplete}
+          onClose={() => setShowPaymentModal(false)}
+          submitting={submitting}
+        />
+      )}
 
       {/* Mobile sticky bottom bar */}
       {showMobileBar && (

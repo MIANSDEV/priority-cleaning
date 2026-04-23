@@ -9,16 +9,17 @@ function getAdminClient() {
   );
 }
 
-// PATCH - update booking status (admin)
+// PATCH - update booking status and/or payment status (admin)
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   const supabase = getAdminClient();
-  const { status, notes } = await request.json();
+  const { status, payment_status, notes } = await request.json();
 
   const updates: Record<string, unknown> = { updated_at: new Date().toISOString() };
   if (status) updates.status = status;
+  if (payment_status) updates.payment_status = payment_status;
   if (notes !== undefined) updates.notes = notes;
 
   const { data, error } = await supabase
