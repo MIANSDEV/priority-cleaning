@@ -55,8 +55,7 @@ export default function ReviewBook({ quote, reviewData, onConfirm, loading, conf
           Booking #{bookingNumber}
         </div>
         <p className="text-sm text-gray-600 max-w-sm mx-auto">
-          A confirmation has been sent to <strong>{reviewData.customer_email}</strong>. Our team
-          will contact you at <strong>{reviewData.customer_phone}</strong> to confirm your appointment.
+          Our team will contact you at <strong>{reviewData.customer_phone}</strong> to confirm your appointment.
         </p>
         <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded text-sm text-amber-800 max-w-sm mx-auto">
           <strong>Estimated Total: ${quote.total.toFixed(2)}</strong>
