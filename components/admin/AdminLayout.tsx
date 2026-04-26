@@ -8,6 +8,7 @@ import {
   Tag,
   Star,
   CalendarCheck,
+  Clock,
   LogOut,
   Menu,
   X,
@@ -17,6 +18,7 @@ import { useState, useEffect } from "react";
 const NAV = [
   { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/dashboard/bookings", label: "Bookings", icon: CalendarCheck },
+  { href: "/admin/dashboard/availability", label: "Availability", icon: Clock },
   { href: "/admin/dashboard/services", label: "Services & Pricing", icon: Package },
   { href: "/admin/dashboard/promo", label: "Promo Codes", icon: Tag },
   { href: "/admin/dashboard/specials", label: "Online Specials", icon: Star },

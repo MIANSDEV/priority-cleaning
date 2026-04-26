@@ -14,6 +14,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const STEPS: QuoteStep[] = ["services", "scheduling", "contact", "review"];
 
+const STORAGE_KEY = "quote_builder_state";
+
 export default function QuoteBuilder() {
   const [step, setStep] = useState<QuoteStep>("services");
   const [categories, setCategories] = useState<ServiceCategory[]>([]);
@@ -39,6 +41,24 @@ export default function QuoteBuilder() {
     customer_phone: "",
     notes: "",
   });
+
+  // Restore from localStorage after mount (must be useEffect — localStorage unavailable during SSR)
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const saved = JSON.parse(raw);
+      if (saved.step) setStep(saved.step);
+      if (saved.selected?.length) setSelected(saved.selected);
+      if (saved.promoInput) setPromoInput(saved.promoInput);
+      if (saved.appliedPromo) setAppliedPromo(saved.appliedPromo);
+      if (saved.scheduling?.preferred_date || saved.scheduling?.zip_code)
+        setScheduling(saved.scheduling);
+      if (saved.contact?.customer_name) setContact(saved.contact);
+    } catch {
+      // corrupted storage — ignore
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [submitting, setSubmitting] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
@@ -67,6 +87,22 @@ export default function QuoteBuilder() {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
+
+  // Persist state to localStorage so reload lands on the same step
+  useEffect(() => {
+    if (confirmed) {
+      localStorage.removeItem(STORAGE_KEY);
+      return;
+    }
+    try {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ step, selected, promoInput, appliedPromo, scheduling, contact })
+      );
+    } catch {
+      // storage quota exceeded — ignore
+    }
+  }, [step, selected, promoInput, appliedPromo, scheduling, contact, confirmed]);
 
   const subtotal = selected.reduce((sum, s) => sum + s.subtotal, 0);
   const discountAmount = appliedPromo
@@ -198,7 +234,7 @@ export default function QuoteBuilder() {
     <div className="min-h-screen bg-gray-100">
       <StepIndicator currentStep={step} />
 
-      <div className={`max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-6 ${showMobileBar ? "pb-24 md:pb-6" : ""}`}>
+      <div className={`max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-6 ${showMobileBar ? "pb-32" : ""}`}>
         <div className="flex gap-4 lg:gap-5">
           {/* Left: Online Specials — desktop only */}
           <div className="hidden lg:block w-44 xl:w-48 flex-shrink-0">
@@ -220,7 +256,7 @@ export default function QuoteBuilder() {
               </button>
             )}
 
-            <div className="bg-white rounded shadow-sm p-4 sm:p-5">
+            <div className={`bg-white rounded shadow-sm p-4 sm:p-5 ${showMobileBar ? "pb-6 sm:pb-8" : ""}`}>
               {step === "services" && (
                 <SelectServices
                   categories={categories}
@@ -245,18 +281,7 @@ export default function QuoteBuilder() {
                 />
               )}
 
-              {/* Desktop next button (inside card) — hidden on mobile since sticky bar handles it */}
-              {step !== "review" && !confirmed && (
-                <div className="hidden md:flex mt-6 pt-4 border-t border-gray-100 justify-end">
-                  <button
-                    onClick={handleNext}
-                    disabled={!canProceed()}
-                    className="bg-brand disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3 px-8 rounded text-sm transition-colors"
-                  >
-                    {stepLabels[step]}
-                  </button>
-                </div>
-              )}
+              {/* Next button removed from card — handled by the sticky bottom bar on all screen sizes */}
             </div>
 
             {/* Mobile: specials shown below main card */}
@@ -298,9 +323,9 @@ export default function QuoteBuilder() {
         />
       )}
 
-      {/* Mobile sticky bottom bar */}
+      {/* Sticky bottom bar — all screen sizes */}
       {showMobileBar && (
-        <div className="md:hidden fixed bottom-0 left-0 right-0 z-20 bg-white border-t border-gray-200 shadow-lg">
+        <div className="fixed bottom-0 left-0 right-0 z-20 bg-white border-t border-gray-200 shadow-lg">
           <div className="flex items-center justify-between px-4 py-3">
             <div>
               <div className="text-[10px] text-gray-400 uppercase tracking-wide">Estimated Total</div>
