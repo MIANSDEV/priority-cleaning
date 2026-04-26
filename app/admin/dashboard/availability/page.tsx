@@ -170,8 +170,7 @@ export default function AvailabilityPage() {
 
   const isDirty = () => {
     if (slots.size !== original.size) return true;
-    for (const k of slots) if (!original.has(k)) return true;
-    return false;
+    return Array.from(slots).some((k) => !original.has(k));
   };
 
   const saveSlots = async () => {
