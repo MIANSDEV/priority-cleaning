@@ -15,6 +15,7 @@ interface Props {
   onNext: () => void;
   nextLabel?: string;
   showNext?: boolean;
+  canProceed?: boolean;
 }
 
 export default function QuoteSummary({
@@ -28,6 +29,7 @@ export default function QuoteSummary({
   onNext,
   nextLabel = "Continue",
   showNext = true,
+  canProceed = true,
 }: Props) {
   return (
     <div className="bg-white border border-gray-200 rounded shadow-sm sticky top-4">
@@ -162,15 +164,17 @@ export default function QuoteSummary({
         <div className="px-4 pb-4">
           <button
             onClick={onNext}
-            disabled={quote.selected.length === 0}
-            className="w-full bg-brand disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3 rounded text-sm flex items-center justify-center gap-2 transition-colors"
+            disabled={!canProceed}
+            className="w-full bg-brand disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded text-sm flex items-center justify-center gap-2 transition-opacity"
           >
             {nextLabel}
             <ChevronRight size={16} />
           </button>
-          {quote.selected.length === 0 && (
-            <p className="text-center text-[10px] text-gray-400 mt-1">
-              Select at least one service to continue
+          {!canProceed && (
+            <p className="text-center text-[10px] text-gray-400 mt-1.5">
+              {quote.selected.length === 0
+                ? "Select at least one service to continue"
+                : "Please fill in all required fields"}
             </p>
           )}
         </div>

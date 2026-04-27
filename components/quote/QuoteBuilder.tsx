@@ -228,13 +228,13 @@ export default function QuoteBuilder() {
     review: "Confirm Booking",
   };
 
-  const showMobileBar = !confirmed && step !== "review";
+  const showContinue = !confirmed && step !== "review";
 
   return (
     <div className="min-h-screen bg-gray-100">
       <StepIndicator currentStep={step} />
 
-      <div className={`max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-6 ${showMobileBar ? "pb-32" : ""}`}>
+      <div className={`max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-6 ${showContinue ? "pb-20 md:pb-6" : ""}`}>
         <div className="flex gap-4 lg:gap-5">
           {/* Left: Online Specials — desktop only */}
           <div className="hidden lg:block w-44 xl:w-48 flex-shrink-0">
@@ -256,7 +256,7 @@ export default function QuoteBuilder() {
               </button>
             )}
 
-            <div className={`bg-white rounded shadow-sm p-4 sm:p-5 ${showMobileBar ? "pb-6 sm:pb-8" : ""}`}>
+            <div className="bg-white rounded shadow-sm p-4 sm:p-5">
               {step === "services" && (
                 <SelectServices
                   categories={categories}
@@ -280,8 +280,6 @@ export default function QuoteBuilder() {
                   bookingNumber={bookingNumber}
                 />
               )}
-
-              {/* Next button removed from card — handled by the sticky bottom bar on all screen sizes */}
             </div>
 
             {/* Mobile: specials shown below main card */}
@@ -307,7 +305,8 @@ export default function QuoteBuilder() {
               promoLoading={promoLoading}
               onNext={handleNext}
               nextLabel={stepLabels[step]}
-              showNext={false}
+              showNext={showContinue}
+              canProceed={canProceed()}
             />
           </div>
         </div>
@@ -323,19 +322,19 @@ export default function QuoteBuilder() {
         />
       )}
 
-      {/* Sticky bottom bar — all screen sizes */}
-      {showMobileBar && (
-        <div className="fixed bottom-0 left-0 right-0 z-20 bg-white border-t-[3px] border-[#f0b030]" style={{boxShadow: "0 -4px 24px rgba(0,0,0,0.13)"}}>
-          <div className="max-w-6xl mx-auto px-3 sm:px-4 py-2.5 sm:py-3 flex items-center justify-between gap-3">
+      {/* Mobile-only fixed bottom bar — hidden on md+ where sidebar button is used */}
+      {showContinue && (
+        <div className="md:hidden fixed bottom-0 left-0 right-0 z-20 bg-white border-t border-gray-200" style={{ boxShadow: "0 -2px 12px rgba(0,0,0,0.1)" }}>
+          <div className="flex items-center justify-between px-4 py-3 gap-3">
             <div className="min-w-0">
-              <div className="text-[9px] sm:text-[10px] text-gray-400 uppercase tracking-widest font-semibold leading-none mb-1">
+              <div className="text-[9px] text-gray-400 uppercase tracking-widest font-semibold leading-none mb-1">
                 Estimated Total
               </div>
-              <div className="text-xl sm:text-2xl font-extrabold text-gray-900 leading-none">
+              <div className="text-xl font-extrabold text-gray-900 leading-none">
                 ${total.toFixed(2)}
               </div>
               {discountAmount > 0 && (
-                <div className="text-[10px] sm:text-xs text-green-600 font-semibold mt-1">
+                <div className="text-[10px] text-green-600 font-semibold mt-0.5">
                   Saving ${discountAmount.toFixed(2)}
                 </div>
               )}
@@ -343,13 +342,10 @@ export default function QuoteBuilder() {
             <button
               onClick={handleNext}
               disabled={!canProceed()}
-              className="bg-brand disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded flex items-center gap-1.5 transition-opacity flex-shrink-0 py-2.5 px-4 sm:py-3 sm:px-7 text-xs sm:text-sm"
+              className="bg-brand disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3 px-5 rounded flex items-center gap-1.5 transition-opacity flex-shrink-0 text-sm"
             >
-              <span className="sm:hidden">
-                {step === "contact" ? "Review Order" : "Continue"}
-              </span>
-              <span className="hidden sm:inline">{stepLabels[step]}</span>
-              <ChevronRight size={14} />
+              Continue
+              <ChevronRight size={15} />
             </button>
           </div>
         </div>
