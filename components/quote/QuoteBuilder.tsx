@@ -325,13 +325,17 @@ export default function QuoteBuilder() {
 
       {/* Sticky bottom bar — all screen sizes */}
       {showMobileBar && (
-        <div className="fixed bottom-0 left-0 right-0 z-20 bg-white border-t border-gray-200 shadow-lg">
-          <div className="flex items-center justify-between px-4 py-3">
-            <div>
-              <div className="text-[10px] text-gray-400 uppercase tracking-wide">Estimated Total</div>
-              <div className="text-xl font-bold text-gray-800">${total.toFixed(2)}</div>
+        <div className="fixed bottom-0 left-0 right-0 z-20 bg-white border-t-[3px] border-[#f0b030]" style={{boxShadow: "0 -4px 24px rgba(0,0,0,0.13)"}}>
+          <div className="max-w-6xl mx-auto px-3 sm:px-4 py-2.5 sm:py-3 flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <div className="text-[9px] sm:text-[10px] text-gray-400 uppercase tracking-widest font-semibold leading-none mb-1">
+                Estimated Total
+              </div>
+              <div className="text-xl sm:text-2xl font-extrabold text-gray-900 leading-none">
+                ${total.toFixed(2)}
+              </div>
               {discountAmount > 0 && (
-                <div className="text-[10px] text-green-600 font-bold">
+                <div className="text-[10px] sm:text-xs text-green-600 font-semibold mt-1">
                   Saving ${discountAmount.toFixed(2)}
                 </div>
               )}
@@ -339,10 +343,13 @@ export default function QuoteBuilder() {
             <button
               onClick={handleNext}
               disabled={!canProceed()}
-              className="bg-brand disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3 px-5 rounded text-sm flex items-center gap-2 transition-colors"
+              className="bg-brand disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded flex items-center gap-1.5 transition-opacity flex-shrink-0 py-2.5 px-4 sm:py-3 sm:px-7 text-xs sm:text-sm"
             >
-              {stepLabels[step]}
-              <ChevronRight size={15} />
+              <span className="sm:hidden">
+                {step === "contact" ? "Review Order" : "Continue"}
+              </span>
+              <span className="hidden sm:inline">{stepLabels[step]}</span>
+              <ChevronRight size={14} />
             </button>
           </div>
         </div>
