@@ -51,13 +51,13 @@ export default function ReviewBook({ quote, reviewData, onConfirm, loading, conf
         <p className="text-gray-500 text-sm mb-4">
           Your booking request has been submitted successfully.
         </p>
-        <div className="inline-block bg-brand text-white font-bold text-base sm:text-lg px-5 py-3 rounded mb-5 break-all">
+        <div className="inline-block bg-user-brand text-white font-bold text-base sm:text-lg px-5 py-3 rounded mb-5 break-all">
           Booking #{bookingNumber}
         </div>
         <p className="text-sm text-gray-600 max-w-sm mx-auto">
           Our team will contact you at <strong>{reviewData.customer_phone}</strong> to confirm your appointment.
         </p>
-        <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded text-sm text-amber-800 max-w-sm mx-auto">
+        <div className="mt-6 p-4 bg-[#e8f6fc] border border-[#b3dff0] rounded text-sm text-[#2d7a9a] max-w-sm mx-auto">
           <strong>Estimated Total: ${quote.total.toFixed(2)}</strong>
           <br />
           Final pricing will be confirmed at the time of service.
@@ -124,7 +124,7 @@ export default function ReviewBook({ quote, reviewData, onConfirm, loading, conf
               )}
               <div className="flex justify-between font-bold text-sm text-gray-800 pt-1 border-t border-gray-200">
                 <span>Estimated Total</span>
-                <span className="text-[#F5A000]">${quote.total.toFixed(2)}</span>
+                <span className="text-[#6FC2E3]">${quote.total.toFixed(2)}</span>
               </div>
             </div>
           </div>
@@ -137,21 +137,21 @@ export default function ReviewBook({ quote, reviewData, onConfirm, loading, conf
           </h3>
           <div className="border border-gray-200 rounded overflow-hidden divide-y divide-gray-100">
             <div className="px-4 py-3 flex items-start gap-3">
-              <User size={15} className="text-[#F5A000] mt-0.5 flex-shrink-0" />
+              <User size={15} className="text-[#6FC2E3] mt-0.5 flex-shrink-0" />
               <div>
                 <div className="text-xs text-gray-400">Name</div>
                 <div className="text-sm font-medium text-gray-700">{reviewData.customer_name}</div>
               </div>
             </div>
             <div className="px-4 py-3 flex items-start gap-3">
-              <Mail size={15} className="text-[#F5A000] mt-0.5 flex-shrink-0" />
+              <Mail size={15} className="text-[#6FC2E3] mt-0.5 flex-shrink-0" />
               <div>
                 <div className="text-xs text-gray-400">Email</div>
                 <div className="text-sm font-medium text-gray-700">{reviewData.customer_email}</div>
               </div>
             </div>
             <div className="px-4 py-3 flex items-start gap-3">
-              <Phone size={15} className="text-[#F5A000] mt-0.5 flex-shrink-0" />
+              <Phone size={15} className="text-[#6FC2E3] mt-0.5 flex-shrink-0" />
               <div>
                 <div className="text-xs text-gray-400">Phone</div>
                 <div className="text-sm font-medium text-gray-700">{reviewData.customer_phone}</div>
@@ -159,7 +159,7 @@ export default function ReviewBook({ quote, reviewData, onConfirm, loading, conf
             </div>
             {reviewData.preferred_date && (
               <div className="px-4 py-3 flex items-start gap-3">
-                <Calendar size={15} className="text-[#F5A000] mt-0.5 flex-shrink-0" />
+                <Calendar size={15} className="text-[#6FC2E3] mt-0.5 flex-shrink-0" />
                 <div>
                   <div className="text-xs text-gray-400">Preferred Date & Time</div>
                   <div className="text-sm font-medium text-gray-700">
@@ -175,7 +175,7 @@ export default function ReviewBook({ quote, reviewData, onConfirm, loading, conf
             )}
             {(reviewData.zip_code || reviewData.service_address) && (
               <div className="px-4 py-3 flex items-start gap-3">
-                <MapPin size={15} className="text-[#F5A000] mt-0.5 flex-shrink-0" />
+                <MapPin size={15} className="text-[#6FC2E3] mt-0.5 flex-shrink-0" />
                 <div>
                   <div className="text-xs text-gray-400">Service Location</div>
                   {reviewData.service_address && (
@@ -196,7 +196,7 @@ export default function ReviewBook({ quote, reviewData, onConfirm, loading, conf
         <button
           onClick={onConfirm}
           disabled={loading}
-          className="w-full max-w-md bg-brand disabled:opacity-50 text-white font-bold py-3.5 sm:py-4 rounded text-sm sm:text-base flex items-center justify-center gap-2 transition-colors shadow-lg"
+          className="w-full max-w-md bg-user-brand disabled:opacity-50 text-white font-bold py-3.5 sm:py-4 rounded text-sm sm:text-base flex items-center justify-center gap-2 transition-colors shadow-lg"
         >
           {loading ? (
             <>

@@ -214,7 +214,7 @@ export default function QuoteBuilder() {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <div className="text-center">
-          <div className="w-10 h-10 border-4 border-[#F5A000] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+          <div className="w-10 h-10 border-4 border-[#6FC2E3] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
           <p className="text-gray-500 text-sm">Loading services...</p>
         </div>
       </div>
@@ -249,7 +249,7 @@ export default function QuoteBuilder() {
             {step !== "services" && !confirmed && (
               <button
                 onClick={handleBack}
-                className="flex items-center gap-1 text-sm text-gray-500 hover:text-[#F5A000] mb-3 transition-colors"
+                className="flex items-center gap-1 text-sm text-gray-500 hover:text-[#6FC2E3] mb-3 transition-colors"
               >
                 <ChevronLeft size={16} />
                 Back
@@ -342,7 +342,7 @@ export default function QuoteBuilder() {
             <button
               onClick={handleNext}
               disabled={!canProceed()}
-              className="bg-brand disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3 px-5 rounded flex items-center gap-1.5 transition-opacity flex-shrink-0 text-sm"
+              className="bg-user-brand disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3 px-5 rounded flex items-center gap-1.5 transition-opacity flex-shrink-0 text-sm"
             >
               Continue
               <ChevronRight size={15} />

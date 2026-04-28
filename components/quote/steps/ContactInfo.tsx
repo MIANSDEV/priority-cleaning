@@ -31,7 +31,7 @@ export default function ContactInfo({ data, onChange }: Props) {
         {/* Full Name */}
         <div>
           <label className="block text-sm font-bold text-gray-700 mb-1.5">
-            <User size={13} className="inline mr-1 text-[#F5A000]" />
+            <User size={13} className="inline mr-1 text-[#6FC2E3]" />
             Full Name <span className="text-red-500">*</span>
           </label>
           <input
@@ -39,14 +39,14 @@ export default function ContactInfo({ data, onChange }: Props) {
             value={data.customer_name}
             onChange={(e) => update("customer_name", e.target.value)}
             placeholder="John Smith"
-            className="w-full border border-gray-300 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#F5A000] focus:ring-1 focus:ring-[#F5A000]"
+            className="w-full border border-gray-300 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#6FC2E3] focus:ring-1 focus:ring-[#6FC2E3]"
           />
         </div>
 
         {/* Email */}
         <div>
           <label className="block text-sm font-bold text-gray-700 mb-1.5">
-            <Mail size={13} className="inline mr-1 text-[#F5A000]" />
+            <Mail size={13} className="inline mr-1 text-[#6FC2E3]" />
             Email Address <span className="text-red-500">*</span>
           </label>
           <input
@@ -54,14 +54,14 @@ export default function ContactInfo({ data, onChange }: Props) {
             value={data.customer_email}
             onChange={(e) => update("customer_email", e.target.value)}
             placeholder="john@example.com"
-            className="w-full border border-gray-300 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#F5A000] focus:ring-1 focus:ring-[#F5A000]"
+            className="w-full border border-gray-300 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#6FC2E3] focus:ring-1 focus:ring-[#6FC2E3]"
           />
         </div>
 
         {/* Phone */}
         <div>
           <label className="block text-sm font-bold text-gray-700 mb-1.5">
-            <Phone size={13} className="inline mr-1 text-[#F5A000]" />
+            <Phone size={13} className="inline mr-1 text-[#6FC2E3]" />
             Phone Number <span className="text-red-500">*</span>
           </label>
           <input
@@ -69,14 +69,14 @@ export default function ContactInfo({ data, onChange }: Props) {
             value={data.customer_phone}
             onChange={(e) => update("customer_phone", e.target.value)}
             placeholder="(555) 555-5555"
-            className="w-full border border-gray-300 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#F5A000] focus:ring-1 focus:ring-[#F5A000]"
+            className="w-full border border-gray-300 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#6FC2E3] focus:ring-1 focus:ring-[#6FC2E3]"
           />
         </div>
 
         {/* Notes */}
         <div>
           <label className="block text-sm font-bold text-gray-700 mb-1.5">
-            <MessageSquare size={13} className="inline mr-1 text-[#F5A000]" />
+            <MessageSquare size={13} className="inline mr-1 text-[#6FC2E3]" />
             Special Requests / Notes
             <span className="text-gray-400 font-normal ml-1">(optional)</span>
           </label>
@@ -85,7 +85,7 @@ export default function ContactInfo({ data, onChange }: Props) {
             onChange={(e) => update("notes", e.target.value)}
             placeholder="Any special instructions or questions..."
             rows={3}
-            className="w-full border border-gray-300 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#F5A000] focus:ring-1 focus:ring-[#F5A000] resize-none"
+            className="w-full border border-gray-300 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#6FC2E3] focus:ring-1 focus:ring-[#6FC2E3] resize-none"
           />
         </div>
       </div>

@@ -19,7 +19,7 @@ export default function StepIndicator({ currentStep }: Props) {
 
   return (
     <div className="bg-white border-b border-gray-200">
-      <div className="max-w-6xl mx-auto px-2 sm:px-4">
+      <div className="max-w-6xl mx-auto px-2 sm:px-4 mb-3">
         <div className="flex items-stretch">
           {STEPS.map((step, index) => {
             const isCompleted = index < currentIndex;
@@ -31,7 +31,7 @@ export default function StepIndicator({ currentStep }: Props) {
                 key={step.key}
                 className={[
                   "flex items-center flex-1 py-2.5 sm:py-3 px-2 sm:px-4 text-xs sm:text-sm font-medium relative",
-                  isActive ? "bg-brand text-white" : "",
+                  isActive ? "bg-user-brand text-white" : "",
                   isCompleted ? "bg-gray-100 text-gray-600" : "",
                   !isActive && !isCompleted ? "text-gray-400 bg-white" : "",
                   !isLast ? "border-r border-gray-200" : "",
@@ -40,8 +40,8 @@ export default function StepIndicator({ currentStep }: Props) {
                 <span
                   className={[
                     "w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-bold mr-1.5 sm:mr-2 flex-shrink-0",
-                    isActive ? "bg-white text-[#F5A000]" : "",
-                    isCompleted ? "bg-brand text-white" : "",
+                    isActive ? "bg-white text-[#6FC2E3]" : "",
+                    isCompleted ? "bg-user-brand text-white" : "",
                     !isActive && !isCompleted ? "bg-gray-200 text-gray-500" : "",
                   ].join(" ")}
                 >

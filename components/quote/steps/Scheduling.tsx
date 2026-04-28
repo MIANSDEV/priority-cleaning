@@ -141,7 +141,7 @@ export default function Scheduling({ data, onChange }: Props) {
         <h2 className="text-lg sm:text-xl font-bold text-gray-800">
           Appointment Date &amp; Arrival Window
         </h2>
-        <p className="text-xs text-[#F5A000] font-medium mt-1">
+        <p className="text-xs text-[#6FC2E3] font-medium mt-1">
           * When you review your order you can choose to receive a text message alerting you when
           we are on our way.
         </p>
@@ -159,7 +159,7 @@ export default function Scheduling({ data, onChange }: Props) {
           <button
             onClick={goBack}
             disabled={!canGoBack}
-            className="flex items-center gap-0.5 text-xs sm:text-sm font-semibold text-[#F5A000] disabled:text-gray-300 hover:text-[#d48800] transition-colors whitespace-nowrap"
+            className="flex items-center gap-0.5 text-xs sm:text-sm font-semibold text-[#6FC2E3] disabled:text-gray-300 hover:text-[#52b5da] transition-colors whitespace-nowrap"
           >
             <ChevronLeft size={15} />
             {daysPerView === 7 ? "PREV WEEK" : "PREV"}
@@ -173,7 +173,7 @@ export default function Scheduling({ data, onChange }: Props) {
 
           <button
             onClick={goForward}
-            className="flex items-center gap-0.5 text-xs sm:text-sm font-semibold text-[#F5A000] hover:text-[#d48800] transition-colors whitespace-nowrap"
+            className="flex items-center gap-0.5 text-xs sm:text-sm font-semibold text-[#6FC2E3] hover:text-[#52b5da] transition-colors whitespace-nowrap"
           >
             {daysPerView === 7 ? "NEXT WEEK" : "NEXT"}
             <ChevronRight size={15} />
@@ -253,7 +253,7 @@ export default function Scheduling({ data, onChange }: Props) {
                             ? "bg-green-500 border border-green-400 cursor-pointer"
                             : isPast || !isAvailable
                             ? "bg-[#c8c8c8] border border-[#b8b8b8]"
-                            : "bg-white border border-gray-200 hover:bg-amber-50 cursor-pointer"
+                            : "bg-white border border-gray-200 hover:bg-[#e8f6fc] cursor-pointer"
                         }`}
                       >
                         {loading ? (
@@ -316,7 +316,7 @@ export default function Scheduling({ data, onChange }: Props) {
       <div className="space-y-4">
         <div>
           <label className="block text-sm font-bold text-gray-700 mb-1.5">
-            <MapPin size={14} className="inline mr-1 text-[#F5A000]" />
+            <MapPin size={14} className="inline mr-1 text-[#6FC2E3]" />
             Zip Code <span className="text-red-500">*</span>
           </label>
           <input
@@ -325,7 +325,7 @@ export default function Scheduling({ data, onChange }: Props) {
             onChange={(e) => update("zip_code", e.target.value.replace(/\D/g, "").slice(0, 5))}
             placeholder="Enter your zip code"
             maxLength={5}
-            className="w-full max-w-xs border border-gray-300 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#F5A000] focus:ring-1 focus:ring-[#F5A000]"
+            className="w-full max-w-xs border border-gray-300 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#6FC2E3] focus:ring-1 focus:ring-[#6FC2E3]"
           />
         </div>
 
@@ -339,7 +339,7 @@ export default function Scheduling({ data, onChange }: Props) {
             value={data.service_address}
             onChange={(e) => update("service_address", e.target.value)}
             placeholder="123 Main St, City, State"
-            className="w-full max-w-lg border border-gray-300 rounded px-3 py-5 mb-2 text-sm focus:outline-none focus:border-[#F5A000] focus:ring-1 focus:ring-[#F5A000]"
+            className="w-full max-w-lg border border-gray-300 rounded px-3 py-5 mb-2 text-sm focus:outline-none focus:border-[#6FC2E3] focus:ring-1 focus:ring-[#6FC2E3]"
           />
         </div>
       </div>

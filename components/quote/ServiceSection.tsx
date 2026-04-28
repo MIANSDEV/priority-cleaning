@@ -104,7 +104,7 @@ export default function ServiceSection({ category, selected, onUpdate }: Props) 
         }`}
       >
         <span className="font-bold text-sm tracking-wide">{category.name}</span>
-        <span className="bg-brand text-white p-1 rounded flex items-center justify-center flex-shrink-0">
+        <span className="bg-user-brand text-white p-1 rounded flex items-center justify-center flex-shrink-0">
           {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </span>
       </button>
@@ -140,13 +140,13 @@ export default function ServiceSection({ category, selected, onUpdate }: Props) 
                   return (
                     <div key={item.id} className="px-4 py-3">
                       <label className="flex items-start gap-3 cursor-pointer">
-                        <button onClick={() => handleCheckbox(item)} className="mt-0.5 flex-shrink-0 text-[#F5A000]">
+                        <button onClick={() => handleCheckbox(item)} className="mt-0.5 flex-shrink-0 text-[#6FC2E3]">
                           {itemSel ? <CheckSquare size={18} /> : <Square size={18} className="text-gray-400" />}
                         </button>
                         <div className="flex-1">
                           <p className="text-sm text-gray-700">{item.name}</p>
                           {itemSel && itemActiveLevels[0]?.price_per_unit > 0 && (
-                            <p className="text-xs text-[#F5A000] font-bold mt-0.5">
+                            <p className="text-xs text-[#6FC2E3] font-bold mt-0.5">
                               +${itemActiveLevels[0].price_per_unit.toFixed(2)}
                             </p>
                           )}
@@ -165,7 +165,7 @@ export default function ServiceSection({ category, selected, onUpdate }: Props) 
                   <div
                     key={item.id}
                     className={`flex items-center px-3 py-2.5 transition-colors ${
-                      rowHasSelection ? "bg-orange-50" : "hover:bg-gray-50"
+                      rowHasSelection ? "bg-[#e8f6fc]" : "hover:bg-gray-50"
                     }`}
                   >
                     <div className="flex-1 text-sm text-gray-700 pr-2 min-w-[80px]">{item.name}</div>
@@ -179,7 +179,7 @@ export default function ServiceSection({ category, selected, onUpdate }: Props) 
                               <button
                                 onClick={() => handleQuantity(item, level, -1)}
                                 disabled={!sel}
-                                className="w-6 h-6 rounded border border-gray-300 flex items-center justify-center text-gray-600 hover:border-[#F5A000] hover:text-[#F5A000] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                                className="w-6 h-6 rounded border border-gray-300 flex items-center justify-center text-gray-600 hover:border-[#6FC2E3] hover:text-[#6FC2E3] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                               >
                                 <Minus size={10} />
                               </button>
@@ -189,7 +189,7 @@ export default function ServiceSection({ category, selected, onUpdate }: Props) 
                               <button
                                 onClick={() => handleQuantity(item, level, 1)}
                                 disabled={sel ? sel.quantity >= item.max_quantity : false}
-                                className="w-6 h-6 rounded border border-gray-300 flex items-center justify-center text-gray-600 hover:border-[#F5A000] hover:text-[#F5A000] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                                className="w-6 h-6 rounded border border-gray-300 flex items-center justify-center text-gray-600 hover:border-[#6FC2E3] hover:text-[#6FC2E3] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                               >
                                 <Plus size={10} />
                               </button>
@@ -207,7 +207,7 @@ export default function ServiceSection({ category, selected, onUpdate }: Props) 
                               <button
                                 onClick={() => handleQuantity(item, level, -1)}
                                 disabled={!sel}
-                                className="w-7 h-7 rounded border border-gray-300 flex items-center justify-center text-gray-600 hover:border-[#F5A000] hover:text-[#F5A000] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                                className="w-7 h-7 rounded border border-gray-300 flex items-center justify-center text-gray-600 hover:border-[#6FC2E3] hover:text-[#6FC2E3] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                               >
                                 <Minus size={11} />
                               </button>
@@ -217,7 +217,7 @@ export default function ServiceSection({ category, selected, onUpdate }: Props) 
                               <button
                                 onClick={() => handleQuantity(item, level, 1)}
                                 disabled={sel ? sel.quantity >= item.max_quantity : false}
-                                className="w-7 h-7 rounded border border-gray-300 flex items-center justify-center text-gray-600 hover:border-[#F5A000] hover:text-[#F5A000] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                                className="w-7 h-7 rounded border border-gray-300 flex items-center justify-center text-gray-600 hover:border-[#6FC2E3] hover:text-[#6FC2E3] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                               >
                                 <Plus size={11} />
                               </button>

@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { QuoteState, PromoCode } from "@/lib/types";
+import { QuoteState } from "@/lib/types";
 import { Tag, ChevronRight, X } from "lucide-react";
 
 interface Props {
@@ -133,12 +132,12 @@ export default function QuoteSummary({
               onChange={(e) => setPromoInput(e.target.value.toUpperCase())}
               onKeyDown={(e) => e.key === "Enter" && onApplyPromo(promoInput)}
               placeholder="Enter code"
-              className="flex-1 border border-gray-300 rounded px-3 py-1.5 text-xs uppercase focus:outline-none focus:border-[#F5A000]"
+              className="flex-1 border border-gray-300 rounded px-3 py-1.5 text-xs uppercase focus:outline-none focus:border-[#6FC2E3]"
             />
             <button
               onClick={() => onApplyPromo(promoInput)}
               disabled={promoLoading || !promoInput}
-              className="bg-brand disabled:opacity-50 text-white text-xs font-bold px-3 py-1.5 rounded transition-colors"
+              className="bg-user-brand disabled:opacity-50 text-white text-xs font-bold px-3 py-1.5 rounded transition-colors"
             >
               {promoLoading ? "..." : "Apply"}
             </button>
@@ -150,11 +149,11 @@ export default function QuoteSummary({
       {/* Trust badges */}
       <div className="px-4 py-3 text-[10px] text-gray-500 space-y-1">
         <div className="flex items-center gap-1.5">
-          <span className="w-2 h-2 bg-brand rounded-full flex-shrink-0" />
+          <span className="w-2 h-2 bg-user-brand rounded-full flex-shrink-0" />
           100% satisfaction guarantee
         </div>
         <div className="flex items-center gap-1.5">
-          <span className="w-2 h-2 bg-brand rounded-full flex-shrink-0" />
+          <span className="w-2 h-2 bg-user-brand rounded-full flex-shrink-0" />
           Prices shown are starting rates, final pricing at time of service
         </div>
       </div>
@@ -165,7 +164,7 @@ export default function QuoteSummary({
           <button
             onClick={onNext}
             disabled={!canProceed}
-            className="w-full bg-brand disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded text-sm flex items-center justify-center gap-2 transition-opacity"
+            className="w-full bg-user-brand disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded text-sm flex items-center justify-center gap-2 transition-opacity"
           >
             {nextLabel}
             <ChevronRight size={16} />

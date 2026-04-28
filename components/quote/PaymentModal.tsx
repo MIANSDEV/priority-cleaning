@@ -107,7 +107,7 @@ function StripePaymentForm({
       <button
         type="submit"
         disabled={loading || !stripe}
-        className="w-full bg-brand disabled:opacity-50 text-white font-bold py-3 rounded text-sm flex items-center justify-center gap-2 transition-colors"
+        className="w-full bg-user-brand disabled:opacity-50 text-white font-bold py-3 rounded text-sm flex items-center justify-center gap-2 transition-colors"
       >
         {loading ? (
           <>
@@ -179,10 +179,10 @@ export default function PaymentModal({ amount, onComplete, onClose, submitting }
 
         <div className="p-5">
           {/* Amount banner */}
-          <div className="text-center mb-5 p-3 bg-amber-50 rounded-lg border border-amber-100">
-            <div className="text-[10px] text-amber-700 uppercase tracking-wide font-bold">Estimated Total</div>
-            <div className="text-3xl font-bold text-amber-600">${amount.toFixed(2)}</div>
-            <div className="text-[11px] text-amber-600/70 mt-0.5">Final pricing confirmed at time of service</div>
+          <div className="text-center mb-5 p-3 bg-[#e8f6fc] rounded-lg border border-[#b3dff0]">
+            <div className="text-[10px] text-[#2d7a9a] uppercase tracking-wide font-bold">Estimated Total</div>
+            <div className="text-3xl font-bold text-[#3a9cbf]">${amount.toFixed(2)}</div>
+            <div className="text-[11px] text-[#3a9cbf]/70 mt-0.5">Final pricing confirmed at time of service</div>
           </div>
 
           {/* Method selector */}
@@ -194,12 +194,12 @@ export default function PaymentModal({ amount, onComplete, onClose, submitting }
                 className={[
                   "flex flex-col items-center gap-1.5 p-3 rounded-lg border-2 transition-all text-center",
                   selected === key
-                    ? "border-[#F5A000] bg-amber-50"
+                    ? "border-[#6FC2E3] bg-[#e8f6fc]"
                     : "border-gray-200 bg-white hover:border-gray-300",
                 ].join(" ")}
               >
-                <Icon size={22} className={selected === key ? "text-[#F5A000]" : color} />
-                <span className={`text-[11px] font-bold leading-tight ${selected === key ? "text-[#F5A000]" : "text-gray-700"}`}>
+                <Icon size={22} className={selected === key ? "text-[#6FC2E3]" : color} />
+                <span className={`text-[11px] font-bold leading-tight ${selected === key ? "text-[#6FC2E3]" : "text-gray-700"}`}>
                   {label}
                 </span>
                 <span className="text-[10px] text-gray-400 leading-tight">{sublabel}</span>

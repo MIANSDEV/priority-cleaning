@@ -17,12 +17,20 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Brand gradient used on all yellow/gold elements */
+/* Brand gradient used on all yellow/gold elements (admin panel) */
 .bg-brand {
   background: #f0b030 !important;
 }
 .bg-brand:hover:not(:disabled) {
   background: #fcb116 !important;
+}
+
+/* User panel brand color */
+.bg-user-brand {
+  background: #6FC2E3 !important;
+}
+.bg-user-brand:hover:not(:disabled) {
+  background: #52b5da !important;
 }
 
 /* Ensure smooth scrolling */
