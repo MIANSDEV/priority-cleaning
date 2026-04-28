@@ -10,7 +10,7 @@ import Scheduling from "@/components/quote/steps/Scheduling";
 import ContactInfo from "@/components/quote/steps/ContactInfo";
 import ReviewBook from "@/components/quote/steps/ReviewBook";
 import PaymentModal, { PaymentMethod } from "@/components/quote/PaymentModal";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, X, Tag } from "lucide-react";
 
 const STEPS: QuoteStep[] = ["services", "scheduling", "contact", "review"];
 
@@ -60,6 +60,7 @@ export default function QuoteBuilder() {
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const [zipValid, setZipValid] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
   const [bookingNumber, setBookingNumber] = useState("");
@@ -163,7 +164,7 @@ export default function QuoteBuilder() {
 
   const canProceed = () => {
     if (step === "services") return selected.length > 0;
-    if (step === "scheduling") return !!scheduling.preferred_date && !!scheduling.preferred_time && !!scheduling.zip_code;
+    if (step === "scheduling") return !!scheduling.preferred_date && !!scheduling.preferred_time && zipValid;
     if (step === "contact") return !!contact.customer_name && !!contact.customer_email && !!contact.customer_phone;
     return true;
   };
@@ -234,7 +235,7 @@ export default function QuoteBuilder() {
     <div className="min-h-screen bg-gray-100">
       <StepIndicator currentStep={step} />
 
-      <div className={`max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-6 ${showContinue ? "pb-20 md:pb-6" : ""}`}>
+      <div className="max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-6">
         <div className="flex gap-4 lg:gap-5">
           {/* Left: Online Specials — desktop only */}
           <div className="hidden lg:block w-44 xl:w-48 flex-shrink-0">
@@ -246,10 +247,53 @@ export default function QuoteBuilder() {
 
           {/* Center: Main content */}
           <div className="flex-1 min-w-0">
+
+            {/* Mobile top bar: compact ← Back (left) | $90.00 → (right) */}
+            {!confirmed && step !== "review" && (
+              <div className="md:hidden flex items-center justify-between mb-2 gap-2">
+                {step !== "services" ? (
+                  <button
+                    onClick={handleBack}
+                    className="flex items-center gap-0.5 text-sm text-gray-500 hover:text-[#6FC2E3] transition-colors flex-shrink-0"
+                  >
+                    <ChevronLeft size={15} />
+                    Back
+                  </button>
+                ) : (
+                  <div />
+                )}
+                <button
+                  onClick={handleNext}
+                  disabled={!canProceed()}
+                  className="flex items-center gap-1 text-sm font-bold text-[#6FC2E3] disabled:opacity-40 transition-opacity"
+                >
+                  ${total.toFixed(2)}
+                  <ChevronRight size={15} />
+                </button>
+              </div>
+            )}
+
+            {/* Mobile: applied promo badge with remove (point 4) */}
+            {appliedPromo && (
+              <div className="md:hidden flex items-center justify-between bg-green-50 border border-green-200 rounded px-3 py-1.5 mb-2 text-xs">
+                <span className="flex items-center gap-1.5 text-green-700 font-semibold">
+                  <Tag size={11} className="text-green-600" />
+                  {appliedPromo.code} —{" "}
+                  {appliedPromo.discount_type === "percentage"
+                    ? `${appliedPromo.discount_value}% off`
+                    : `$${appliedPromo.discount_value} off`}
+                </span>
+                <button onClick={handleRemovePromo} className="text-gray-400 hover:text-red-500 transition-colors ml-2">
+                  <X size={14} />
+                </button>
+              </div>
+            )}
+
+            {/* Desktop back button */}
             {step !== "services" && !confirmed && (
               <button
                 onClick={handleBack}
-                className="flex items-center gap-1 text-sm text-gray-500 hover:text-[#6FC2E3] mb-3 transition-colors"
+                className="hidden md:flex items-center gap-1 text-sm text-gray-500 hover:text-[#6FC2E3] mb-3 transition-colors"
               >
                 <ChevronLeft size={16} />
                 Back
@@ -265,7 +309,7 @@ export default function QuoteBuilder() {
                 />
               )}
               {step === "scheduling" && (
-                <Scheduling data={scheduling} onChange={setScheduling} />
+                <Scheduling data={scheduling} onChange={setScheduling} onZipValidChange={setZipValid} />
               )}
               {step === "contact" && (
                 <ContactInfo data={contact} onChange={setContact} />
@@ -281,6 +325,32 @@ export default function QuoteBuilder() {
                 />
               )}
             </div>
+
+            {/* Mobile bottom Continue strip (point 1) */}
+            {!confirmed && step !== "review" && (
+              <div className="md:hidden mt-3 bg-white rounded shadow-sm px-4 py-3 flex items-center justify-between gap-3">
+                <div>
+                  <div className="text-[9px] text-gray-400 uppercase tracking-widest font-semibold leading-none mb-0.5">
+                    Estimated Total
+                  </div>
+                  <div className="text-lg font-extrabold text-gray-900 leading-none">
+                    ${total.toFixed(2)}
+                  </div>
+                  {discountAmount > 0 && (
+                    <div className="text-[9px] text-green-600 font-semibold mt-0.5">
+                      Saving ${discountAmount.toFixed(2)}
+                    </div>
+                  )}
+                </div>
+                <button
+                  onClick={handleNext}
+                  disabled={!canProceed()}
+                  className="bg-user-brand disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-2.5 px-5 rounded text-sm transition-opacity whitespace-nowrap flex-shrink-0"
+                >
+                  Continue
+                </button>
+              </div>
+            )}
 
             {/* Mobile: specials shown below main card */}
             {specials.length > 0 && (
@@ -322,34 +392,6 @@ export default function QuoteBuilder() {
         />
       )}
 
-      {/* Mobile-only fixed bottom bar — hidden on md+ where sidebar button is used */}
-      {showContinue && (
-        <div className="md:hidden fixed bottom-0 left-0 right-0 z-20 bg-white border-t border-gray-200" style={{ boxShadow: "0 -2px 12px rgba(0,0,0,0.1)" }}>
-          <div className="flex items-center justify-between px-4 py-3 gap-3">
-            <div className="min-w-0">
-              <div className="text-[9px] text-gray-400 uppercase tracking-widest font-semibold leading-none mb-1">
-                Estimated Total
-              </div>
-              <div className="text-xl font-extrabold text-gray-900 leading-none">
-                ${total.toFixed(2)}
-              </div>
-              {discountAmount > 0 && (
-                <div className="text-[10px] text-green-600 font-semibold mt-0.5">
-                  Saving ${discountAmount.toFixed(2)}
-                </div>
-              )}
-            </div>
-            <button
-              onClick={handleNext}
-              disabled={!canProceed()}
-              className="bg-user-brand disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3 px-5 rounded flex items-center gap-1.5 transition-opacity flex-shrink-0 text-sm"
-            >
-              Continue
-              <ChevronRight size={15} />
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

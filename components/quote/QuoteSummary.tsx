@@ -167,7 +167,7 @@ export default function QuoteSummary({
             className="w-full bg-user-brand disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded text-sm flex items-center justify-center gap-2 transition-opacity"
           >
             {nextLabel}
-            <ChevronRight size={16} />
+            {/* <ChevronRight size={16} /> */}
           </button>
           {!canProceed && (
             <p className="text-center text-[10px] text-gray-400 mt-1.5">

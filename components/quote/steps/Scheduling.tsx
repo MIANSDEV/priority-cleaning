@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, MapPin } from "lucide-react";
+import { ChevronLeft, ChevronRight, MapPin, CheckCircle, XCircle } from "lucide-react";
 
 interface SchedulingData {
   preferred_date: string;
@@ -13,6 +13,7 @@ interface SchedulingData {
 interface Props {
   data: SchedulingData;
   onChange: (data: SchedulingData) => void;
+  onZipValidChange?: (valid: boolean) => void;
 }
 
 const DAY_LABELS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
@@ -46,9 +47,44 @@ function formatDateRange(start: Date, count: number): string {
   return `${start.toLocaleDateString("en-US", { month: "short", day: "numeric" })} – ${end.toLocaleDateString("en-US", { month: "short", day: "numeric" })}`;
 }
 
-export default function Scheduling({ data, onChange }: Props) {
+export default function Scheduling({ data, onChange, onZipValidChange }: Props) {
   const update = (field: keyof SchedulingData, value: string) =>
     onChange({ ...data, [field]: value });
+
+  const [zipStatus, setZipStatus] = useState<"idle" | "checking" | "valid" | "invalid">("idle");
+
+  useEffect(() => {
+    const zip = data.zip_code;
+    if (zip.length !== 5) {
+      setZipStatus("idle");
+      onZipValidChange?.(false);
+      return;
+    }
+
+    setZipStatus("checking");
+    onZipValidChange?.(false);
+    const controller = new AbortController();
+
+    fetch(`https://api.zippopotam.us/us/${zip}`, { signal: controller.signal })
+      .then((res) => {
+        if (res.ok) {
+          setZipStatus("valid");
+          onZipValidChange?.(true);
+        } else {
+          setZipStatus("invalid");
+          onZipValidChange?.(false);
+        }
+      })
+      .catch((err) => {
+        if (err.name !== "AbortError") {
+          setZipStatus("invalid");
+          onZipValidChange?.(false);
+        }
+      });
+
+    return () => controller.abort();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data.zip_code]);
 
   // Stable today — computed once, never drifts during a session
   const todayRef = useRef<Date>(null as unknown as Date);
@@ -319,14 +355,37 @@ export default function Scheduling({ data, onChange }: Props) {
             <MapPin size={14} className="inline mr-1 text-[#6FC2E3]" />
             Zip Code <span className="text-red-500">*</span>
           </label>
-          <input
-            type="text"
-            value={data.zip_code}
-            onChange={(e) => update("zip_code", e.target.value.replace(/\D/g, "").slice(0, 5))}
-            placeholder="Enter your zip code"
-            maxLength={5}
-            className="w-full max-w-xs border border-gray-300 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#6FC2E3] focus:ring-1 focus:ring-[#6FC2E3]"
-          />
+          <div className="relative max-w-xs">
+            <input
+              type="text"
+              value={data.zip_code}
+              onChange={(e) => update("zip_code", e.target.value.replace(/\D/g, "").slice(0, 5))}
+              placeholder="Enter your zip code"
+              maxLength={5}
+              className={`w-full border rounded px-3 py-2.5 text-sm focus:outline-none focus:ring-1 pr-9 ${
+                zipStatus === "valid"
+                  ? "border-green-400 focus:border-green-400 focus:ring-green-200"
+                  : zipStatus === "invalid"
+                  ? "border-red-400 focus:border-red-400 focus:ring-red-200"
+                  : "border-gray-300 focus:border-[#6FC2E3] focus:ring-[#6FC2E3]"
+              }`}
+            />
+            {zipStatus === "checking" && (
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 border-2 border-[#6FC2E3] border-t-transparent rounded-full animate-spin" />
+            )}
+            {zipStatus === "valid" && (
+              <CheckCircle size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-green-500" />
+            )}
+            {zipStatus === "invalid" && (
+              <XCircle size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-red-500" />
+            )}
+          </div>
+          {zipStatus === "invalid" && (
+            <p className="text-xs text-red-500 mt-1">Please enter a valid US ZIP code.</p>
+          )}
+          {zipStatus === "valid" && (
+            <p className="text-xs text-green-600 mt-1">Valid US ZIP code ✓</p>
+          )}
         </div>
 
         <div>
